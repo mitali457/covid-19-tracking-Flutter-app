@@ -1,6 +1,7 @@
 import 'package:covid19_tracker/model/countries.dart';
 import 'package:covid19_tracker/model/covid19_dashboard.dart';
 import 'package:covid19_tracker/services/networking.dart';
+import 'package:covid19_tracker/widgets/animation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:country_pickers/country_pickers.dart';
@@ -40,6 +41,8 @@ class _MyHomePageState extends State<MyHomePage>
     2.0
 
   ];
+ 
+  
   Covid19Dashboard data;
   AnimationController _controller;
   Animation _curvedAnimation;
@@ -211,47 +214,51 @@ class _MyHomePageState extends State<MyHomePage>
                             ),
                             Padding(
                               padding: const EdgeInsets.only(bottom:80),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    width: 100.0,
-                                    height: 20.0,
-                                    child: Sparkline(
-                                        data: value1,
-                                        lineWidth: 2.0,
-                                        lineColor: Colors.red[900]),
-                                  ),
-                                  Container(
-                                    width: 100.0,
-                                    height: 20.0,
-                                    child: Sparkline(
-                                        data: value2,
-                                        lineWidth: 2.0,
-                                        lineColor: Colors.green[900],)
-                                  ),
-                                  Container(
-                                    width: 100.0,
-                                    height: 20.0,
-                                    child: Sparkline(
-                                        data: value3,
-                                        lineWidth: 2.0,
-                                        lineColor: Colors.brown),
-                                  ),
-                                ],
+                              child: SlideFadeTransition(
+                                 delayStart: Duration(milliseconds: 100),
+                                                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      width: 100.0,
+                                      height: 20.0,
+                                      child: Sparkline(
+                                          data: value1,
+                                          lineWidth: 2.0,
+                                          lineColor: Colors.red[900]),
+                                    ),
+                                    Container(
+                                      width: 100.0,
+                                      height: 20.0,
+                                      child: Sparkline(
+                                          data: value2,
+                                          lineWidth: 2.0,
+                                          lineColor: Colors.green[900],)
+                                    ),
+                                    Container(
+                                      width: 100.0,
+                                      height: 20.0,
+                                      child: Sparkline(
+                                          data: value3,
+                                          lineWidth: 2.0,
+                                          lineColor: Colors.brown),
+                                    ),
+                                  ],
+                                ),
                               ),
                             )
                           ]),
                         ),
                        
                         SliverList(
+                          
                             delegate: SliverChildListDelegate([
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             child: Center(
                               child: Text(' ${data.date}',
                                   style: TextStyle(
-                                      color: Colors.indigo[800],
+                                      color: Colors.indigo[900],
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold)),
                             ),
@@ -273,7 +280,7 @@ class _MyHomePageState extends State<MyHomePage>
 
   Widget buildSummerCard({int count, String text}) {
     return ScaleTransition(
-      scale: Tween<double>(begin: 0, end: 1).animate(_curvedAnimation),
+      scale: Tween<double>(begin: 0, end: 2).animate(_curvedAnimation),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Material(
@@ -285,7 +292,7 @@ class _MyHomePageState extends State<MyHomePage>
                 Text(
                   text,
                   style: TextStyle(
-                    color: Colors.orange,
+                    //color: Colors.orange,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -305,6 +312,7 @@ class _MyHomePageState extends State<MyHomePage>
 
   ExpansionTile buildExpansionTile(Countries item, int index) {
     return ExpansionTile(
+      
       leading: item.countryCode.length == 2
           ? CountryPickerUtils.getDefaultFlagImage(
               Country(isoCode: item.countryCode))
@@ -317,7 +325,7 @@ class _MyHomePageState extends State<MyHomePage>
           fontSize: 17,
         ),
       ),
-      trailing: Text('${formatter.format(item.confirmed)}'),
+      trailing: Text('${formatter.format(item.confirmed)}',),
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -325,19 +333,20 @@ class _MyHomePageState extends State<MyHomePage>
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                buildDetailText(
-                    color: Colors.brown, count: index + 1, text: 'Rank'),
-                buildDetailText(
-                    color: Colors.blue[900],
-                    count: item.active,
-                    text: 'Active'),
-                buildDetailText(
-                    color: Colors.green[900],
-                    count: item.recovered,
-                    text: 'Recovered'),
-                buildDetailText(
-                    color: Colors.red[900], count: item.deaths, text: 'Deaths'),
-              ]),
+                  buildDetailText(
+                    
+                      color: Colors.brown, count: index + 1, text: 'Rank',),
+                  buildDetailText(
+                      color: Colors.blue[900],
+                      count: item.active,
+                      text: 'Active'),
+                  buildDetailText(
+                      color: Colors.green[900],
+                      count: item.recovered,
+                      text: 'Recovered'),
+                  buildDetailText(
+                      color: Colors.red[900], count: item.deaths, text: 'Deaths'),
+                ]),
             ],
           ),
         )
@@ -350,7 +359,8 @@ class _MyHomePageState extends State<MyHomePage>
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: Text(
         '$text: ${formatter.format(count)}',
-        style: TextStyle(color: color),
+        style: TextStyle(color: color, fontSize:16),
+       
       ),
     );
   }
