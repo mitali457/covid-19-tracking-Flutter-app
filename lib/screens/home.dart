@@ -258,10 +258,17 @@ class _MyHomePageState extends State<MyHomePage>
                             child: Center(
                               child: Text(' ${data.date}',
                                   style: TextStyle(
-                                      color: Colors.indigo[900],
+                                      color: Colors.pink[900],
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold)),
                             ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(9.0),
+                            child: Text('Top countries:', style: TextStyle(
+                                        color: Colors.teal[900],
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold)),
                           )
                         ])),
                         SliverList(
@@ -320,12 +327,16 @@ class _MyHomePageState extends State<MyHomePage>
       title: Text(
         '${item.country}',
         style: TextStyle(
-          //color: Colors.black,
+          color: Colors.indigo[900],
           fontWeight: FontWeight.bold,
           fontSize: 17,
         ),
       ),
-      trailing: Text('${formatter.format(item.confirmed)}',),
+      trailing: Text('${formatter.format(item.confirmed)}',style: TextStyle(
+          color: Colors.indigo[900],
+          fontWeight: FontWeight.w500,
+          fontSize: 14,
+        ),),
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
