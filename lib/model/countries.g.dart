@@ -1,10 +1,8 @@
-// GENERATED CODE - DO NOT MODIFY BY HAND
+
 
 part of countries;
 
-// **************************************************************************
-// BuiltValueGenerator
-// **************************************************************************
+
 
 Serializer<Countries> _$countriesSerializer = new _$CountriesSerializer();
 

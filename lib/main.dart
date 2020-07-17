@@ -13,11 +13,11 @@ class MyApp extends StatelessWidget {
       routes: Routes.getRoutes(),
       initialRoute: '/',
       theme: ThemeData(
-        //primarySwatch: Colors.blue[600],
-        //canvasColor: Colors.indigo
+        primaryColor: Colors.pink[800],
+        accentColor: Colors.pink[900]
       ),
       debugShowCheckedModeBanner: false,
-      //home: OnbordingFlow (),
+      
     );
   }
 }

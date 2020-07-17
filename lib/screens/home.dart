@@ -1,9 +1,11 @@
 import 'package:covid19_tracker/model/countries.dart';
 import 'package:covid19_tracker/model/covid19_dashboard.dart';
 import 'package:covid19_tracker/services/networking.dart';
+
 import 'package:flutter/material.dart';
 import 'package:country_pickers/country_pickers.dart';
 import 'package:country_pickers/country.dart';
+import 'package:flutter_sparkline/flutter_sparkline.dart';
 import 'package:intl/intl.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -15,6 +17,29 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
+  var value1 = [
+    0.0,
+    1.0,
+    1.5,
+    0.3,
+    2.0,2.2
+  ];
+  var value2 = [
+    0.0,
+    1.0,
+    1.5,
+    1.0,
+    2.2,
+    2.5
+  ];
+  var value3 = [
+    0.0,
+    1.0,
+    1.5,
+    1.8,
+    2.0
+
+  ];
   Covid19Dashboard data;
   AnimationController _controller;
   Animation _curvedAnimation;
@@ -29,123 +54,224 @@ class _MyHomePageState extends State<MyHomePage>
     _curvedAnimation =
         CurvedAnimation(parent: _controller, curve: Curves.bounceInOut);
     getData();
+
     //_controller.forward();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            stops: [0.1, 0.5, 0.7, 0.9],
-            colors: [
-              Colors.grey[300],
-              Colors.blueGrey[400],
-              Colors.blueGrey[300],
-              Colors.blueGrey[600],
-            ],
-          ),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          stops: [0.1, 0.5, 0.7, 0.9],
+          colors: [
+            Colors.grey[300],
+            Colors.blueGrey[400],
+            Colors.blueGrey[300],
+            Colors.blueGrey[600],
+          ],
         ),
+      ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-
-         backgroundColor: Colors.red[900],
-        title: Text('Covid-19 Tracker',
-        style: TextStyle(fontSize:25,fontWeight:FontWeight.bold),),
-        centerTitle: true,
-        shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(30),
-        ),
-      ),
+          backgroundColor: Colors.red[900],
+          title: Text(
+            'Covid-19 Tracker',
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(30),
+            ),
+          ),
         ),
         body: data == null
             ? Center(child: CircularProgressIndicator())
             : Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: RefreshIndicator(
-                  onRefresh: getData,
-                  child: CustomScrollView(
-                    slivers: <Widget>[
-                      SliverGrid(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 1,
-                          childAspectRatio: 1.9,
-                        ),
-                        delegate: SliverChildListDelegate([
-                          Padding(
-                            padding: const EdgeInsets.only(top:60),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  children: [
-                                    Text('Confirmed',
-                                      style: TextStyle(color:Colors.red[800],fontSize:20,fontWeight:FontWeight.bold)),
-                                      SizedBox(height:10),
-                                      Text(formatter.format(data.confirmed), style: TextStyle(color:Colors.red[800],fontSize:14,fontWeight:FontWeight.bold))
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    Text('Active',
-                                      style: TextStyle(color:Colors.blue[800],fontSize:20,fontWeight:FontWeight.bold)),
-                                      SizedBox(height:10),
-                                      Text(formatter.format(data.active), style: TextStyle(color:Colors.blue[800],fontSize:14,fontWeight:FontWeight.bold))
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    Text('Recovered',
-                                      style: TextStyle(color:Colors.green[800],fontSize:20,fontWeight:FontWeight.bold)),
-                                      SizedBox(height:10),
-                                      Text(formatter.format(data.recovered), style: TextStyle(color:Colors.green[800],fontSize:14,fontWeight:FontWeight.bold))
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    Text('Deaths',
-                                      style: TextStyle(color:Colors.brown[800],fontSize:20,fontWeight:FontWeight.bold)),
-                                      SizedBox(height:10),
-                                      Text(formatter.format(data.deaths), style: TextStyle(color:Colors.brown[800],fontSize:14,fontWeight:FontWeight.bold))
-                                  ],
-                                ),
-                              ],
-                            ),
+                padding: const EdgeInsets.all(18.0),
+                child: RefreshIndicator(
+                    onRefresh: getData,
+                    child: CustomScrollView(
+                      slivers: <Widget>[
+                        SliverGrid(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 1,
+                            childAspectRatio: 2.9,
                           ),
-                              
-                        ]),
-                      ),
-                      SliverList(
                           delegate: SliverChildListDelegate([
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Center(
-                            child: Text(' ${data.date}',
-                            style: TextStyle(color:Colors.indigo[800],fontSize:20,fontWeight:FontWeight.bold)
+                            Padding(
+                              padding: const EdgeInsets.only(top:40),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    height: 80,
+                                    width: 120,
+                                    decoration: BoxDecoration(
+                                      color: Colors.red[100],
+                                      border: Border.all(
+                                        color: Colors.red,
+                                      ),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 18.0),
+                                          child: Text('Confirmed',
+                                              style: TextStyle(
+                                                  color: Colors.red[800],
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                        SizedBox(height: 10),
+                                        Text(formatter.format(data.confirmed),
+                                            style: TextStyle(
+                                                color: Colors.red[800],
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold)),
+                                      ],
+                                    ),
+                                  ),
+                                  // Column(
+                                  //   children: [
+                                  //     Text('Active',
+                                  //       style: TextStyle(color:Colors.blue[800],fontSize:20,fontWeight:FontWeight.bold)),
+                                  //       SizedBox(height:10),
+                                  //       Text(formatter.format(data.active), style: TextStyle(color:Colors.blue[800],fontSize:14,fontWeight:FontWeight.bold))
+                                  //   ],
+                                  // ),
+                                  Container(
+                                    height: 80,
+                                    width: 120,
+                                    decoration: BoxDecoration(
+                                      color: Colors.green[100],
+                                      border: Border.all(
+                                        color: Colors.green,
+                                      ),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 18.0),
+                                          child: Text('Recovered',
+                                              style: TextStyle(
+                                                  color: Colors.green[800],
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                        SizedBox(height: 10),
+                                        Text(formatter.format(data.recovered),
+                                            style: TextStyle(
+                                                color: Colors.green[800],
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold)),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    height: 80,
+                                    width: 120,
+                                    decoration: BoxDecoration(
+                                      color: Colors.brown[100],
+                                      border: Border.all(color: Colors.brown),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 18.0),
+                                          child: Text('Deaths',
+                                              style: TextStyle(
+                                                  color: Colors.brown[800],
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                        SizedBox(height: 10),
+                                        Text(formatter.format(data.deaths),
+                                            style: TextStyle(
+                                                color: Colors.brown[800],
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold))
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom:80),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    width: 100.0,
+                                    height: 20.0,
+                                    child: Sparkline(
+                                        data: value1,
+                                        lineWidth: 2.0,
+                                        lineColor: Colors.red[900]),
+                                  ),
+                                  Container(
+                                    width: 100.0,
+                                    height: 20.0,
+                                    child: Sparkline(
+                                        data: value2,
+                                        lineWidth: 2.0,
+                                        lineColor: Colors.green[900],)
+                                  ),
+                                  Container(
+                                    width: 100.0,
+                                    height: 20.0,
+                                    child: Sparkline(
+                                        data: value3,
+                                        lineWidth: 2.0,
+                                        lineColor: Colors.brown),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ]),
+                        ),
+                       
+                        SliverList(
+                            delegate: SliverChildListDelegate([
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            child: Center(
+                              child: Text(' ${data.date}',
+                                  style: TextStyle(
+                                      color: Colors.indigo[800],
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                          )
+                        ])),
+                        SliverList(
+                          delegate:
+                              SliverChildBuilderDelegate((context, index) {
+                            var item = data.countries[index];
+                            return buildExpansionTile(item, index);
+                          }, childCount: data.countries.length),
                         )
-                      ])),
-                      SliverList(
-                        delegate: SliverChildBuilderDelegate((context, index) {
-                          var item = data.countries[index];
-                          return buildExpansionTile(item, index);
-                        }, childCount: data.countries.length),
-                      )
-                    ],
-                  )
-              
-                  ),
-            ),
+                      ],
+                    )),
+              ),
       ),
     );
   }
 
-  Widget buildSummerCard({int count, Color color, String text}) {
+  Widget buildSummerCard({int count, String text}) {
     return ScaleTransition(
       scale: Tween<double>(begin: 0, end: 1).animate(_curvedAnimation),
       child: Padding(
@@ -159,14 +285,14 @@ class _MyHomePageState extends State<MyHomePage>
                 Text(
                   text,
                   style: TextStyle(
-                    color: color,
+                    color: Colors.orange,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
                   '${formatter.format(count)}',
                   style: TextStyle(
-                    color: color,
+                    color: Colors.purple,
                     fontWeight: FontWeight.bold,
                     fontSize: 22,
                   ),
@@ -183,7 +309,14 @@ class _MyHomePageState extends State<MyHomePage>
           ? CountryPickerUtils.getDefaultFlagImage(
               Country(isoCode: item.countryCode))
           : Text(''),
-      title: Text('${item.country}'),
+      title: Text(
+        '${item.country}',
+        style: TextStyle(
+          //color: Colors.black,
+          fontWeight: FontWeight.bold,
+          fontSize: 17,
+        ),
+      ),
       trailing: Text('${formatter.format(item.confirmed)}'),
       children: <Widget>[
         Padding(
@@ -195,7 +328,9 @@ class _MyHomePageState extends State<MyHomePage>
                 buildDetailText(
                     color: Colors.brown, count: index + 1, text: 'Rank'),
                 buildDetailText(
-                    color: Colors.blue[900], count: item.active, text: 'Active'),
+                    color: Colors.blue[900],
+                    count: item.active,
+                    text: 'Active'),
                 buildDetailText(
                     color: Colors.green[900],
                     count: item.recovered,
